@@ -1,0 +1,34 @@
+
+import pandas as pd
+import numpy as np
+
+data = {
+    "Customer": ["A", "B", "C", "D", "E"],
+    "Interest_Score": [2, 1, 0, -1, -2]
+}
+
+df = pd.DataFrame(data)
+
+df.to_csv("customer_interest_scores.csv", index=False)
+
+df = pd.read_csv("customer_interest_scores.csv")
+print("Customer Interest Dataset:")
+print(df)
+
+z = df["Interest_Score"]
+
+probability = 1 / (1 + np.exp(-z))
+
+print("\nSigmoid Probabilities:")
+print(probability.round(2).to_string(index=False))
+
+df["Probability"] = probability.round(2)
+
+df["Prediction"] = np.where(
+    probability >= 0.5,
+    "Likely",
+    "Unlikely"
+)
+
+print("\nFinal Customer Predictions:")
+print(df)
